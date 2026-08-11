@@ -4,137 +4,99 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<meta name="description" content="Video Mixer — gere criativos combinando Gancho, Desenvolvimento e CTA">
-<link rel="manifest" href="./manifest.webmanifest">
 <title>Video Mixer</title>
+<link rel="manifest" href="./manifest.webmanifest">
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#080d18;color:#f4f7ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.app{max-width:760px;margin:auto;padding:18px 15px 40px}.top{padding:8px 2px 14px}.top h1{font-size:29px;margin:0 0 5px}.top p{margin:0;color:#9ca9c3}.card{background:#111a2c;border:1px solid #27334d;border-radius:18px;padding:16px;margin:12px 0}h2{font-size:17px;margin:0 0 4px}.hint,.small{font-size:12px;color:#929fb8}.drop{display:block;border:1px dashed #596987;background:#0d1423;border-radius:13px;padding:17px;text-align:center;color:#c5cde0;cursor:pointer}.drop input{display:none}.files{margin-top:10px;display:grid;gap:6px}.file{font-size:12px;background:#19243a;padding:8px;border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.summary{display:flex;justify-content:space-between;align-items:center;gap:10px}.count{font-size:21px;font-weight:800}select,button{width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:750}select{margin-top:10px;background:#19243a;color:#fff;border:1px solid #3b4965}button{border:0;background:#6d5dfc;color:#fff;margin-top:10px}button.secondary{background:#26324b}button:disabled{opacity:.45}.progress{height:9px;background:#202b43;border-radius:99px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:#6d5dfc;transition:width .2s}.status{font-size:13px;color:#adb8ce;margin:10px 0 0}.links a{display:block;color:#bdb8ff;padding:8px 0;text-decoration:none;border-bottom:1px solid #27334b}.ok{color:#81e0a7}.warn{color:#ffd071}.install{display:none}.install.show{display:block}.danger{font-size:12px;color:#ffb0b0}.note{line-height:1.45}
+*{box-sizing:border-box}body{margin:0;background:#080d18;color:#f4f7ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{max-width:760px;margin:auto;padding:18px 15px 40px}.top h1{margin:0 0 5px;font-size:29px}.top p{margin:0 0 14px;color:#9ca9c3}
+.card{background:#111a2c;border:1px solid #27334d;border-radius:18px;padding:16px;margin:12px 0}h2{font-size:17px;margin:0 0 5px}.hint,.small{font-size:12px;color:#929fb8}
+.drop{display:block;border:1px dashed #596987;background:#0d1423;border-radius:13px;padding:17px;text-align:center;cursor:pointer}.drop input{display:none}
+.files{display:grid;gap:6px;margin-top:10px}.file{font-size:12px;background:#19243a;padding:8px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.count{font-size:21px;font-weight:800}select,button{width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:750}
+select{margin-top:10px;background:#19243a;color:#fff;border:1px solid #3b4965}button{border:0;background:#6d5dfc;color:#fff;margin-top:10px}button:disabled{opacity:.45}
+.progress{height:9px;background:#202b43;border-radius:99px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:#6d5dfc}
+.status{font-size:13px;color:#adb8ce;line-height:1.4}.links a{display:block;color:#bdb8ff;padding:8px 0;text-decoration:none;border-bottom:1px solid #27334b}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top"><h1>🎬 Video Mixer</h1><p>Gancho + Desenvolvimento + CTA → criativos prontos.</p></header>
 
-<section class="card">
-<h2>1 — Gancho</h2><p class="hint">Selecione um ou vários vídeos.</p>
-<label class="drop">＋ ESCOLHER VÍDEOS<input id="p1" type="file" accept="video/mp4,video/webm,video/quicktime,video/*" multiple></label>
-<div id="f1" class="files"></div>
-</section>
+<div class="card"><h2>1 — Gancho</h2><p class="hint">Selecione um ou vários vídeos.</p>
+<label class="drop">＋ ESCOLHER VÍDEOS<input id="p1" type="file" accept="video/*" multiple></label><div id="f1" class="files"></div></div>
 
-<section class="card">
-<h2>2 — Desenvolvimento</h2><p class="hint">Selecione as diferentes versões.</p>
-<label class="drop">＋ ESCOLHER VÍDEOS<input id="p2" type="file" accept="video/mp4,video/webm,video/quicktime,video/*" multiple></label>
-<div id="f2" class="files"></div>
-</section>
+<div class="card"><h2>2 — Desenvolvimento</h2><p class="hint">Selecione as versões do desenvolvimento.</p>
+<label class="drop">＋ ESCOLHER VÍDEOS<input id="p2" type="file" accept="video/*" multiple></label><div id="f2" class="files"></div></div>
 
-<section class="card">
-<h2>3 — CTA</h2><p class="hint">Selecione suas chamadas para ação.</p>
-<label class="drop">＋ ESCOLHER VÍDEOS<input id="p3" type="file" accept="video/mp4,video/webm,video/quicktime,video/*" multiple></label>
-<div id="f3" class="files"></div>
-</section>
+<div class="card"><h2>3 — CTA</h2><p class="hint">Selecione as chamadas para ação.</p>
+<label class="drop">＋ ESCOLHER VÍDEOS<input id="p3" type="file" accept="video/*" multiple></label><div id="f3" class="files"></div></div>
 
-<section class="card">
-<div class="summary"><div><div class="count" id="count">0</div><div class="small">combinações possíveis</div></div><div class="small">9:16 • MP4</div></div>
-<select id="limit"><option value="10">Gerar no máximo 10</option><option value="30" selected>Gerar no máximo 30</option><option value="50">Gerar no máximo 50</option><option value="100">Gerar no máximo 100</option><option value="200">Gerar no máximo 200</option></select>
-<button id="generate">🔥 GERAR CRIATIVOS</button>
-<button id="stop" class="secondary" disabled>PARAR</button>
-<div class="progress"><div id="bar" class="bar"></div></div>
-<p id="status" class="status">Adicione os vídeos para começar.</p>
-</section>
+<div class="card"><div><div class="count" id="count">0</div><div class="small">combinações possíveis</div></div>
+<select id="limit"><option value="1">Teste: 1 criativo</option><option value="10">10 criativos</option><option value="30" selected>30 criativos</option><option value="50">50 criativos</option></select>
+<button id="generate">🔥 GERAR CRIATIVOS</button><div class="progress"><div id="bar" class="bar"></div></div>
+<p id="status" class="status">Adicione os vídeos para começar.</p></div>
 
-<section class="card">
-<h2>Arquivos gerados</h2>
-<button id="zip" class="secondary" disabled>🗜️ BAIXAR TODOS EM ZIP</button>
-<div id="links" class="links"><span class="small">Nenhum vídeo gerado ainda.</span></div>
-</section>
-
-<section class="card note">
-<h2>Como usar</h2>
-<p class="small">Para resultados mais rápidos, grave todos os blocos em vertical 1080×1920, 30 fps, preferencialmente MP4. O processamento acontece no aparelho e pode consumir bastante memória.</p>
-<p class="danger">Não feche o navegador durante a geração.</p>
-</section>
+<div class="card"><h2>Vídeos gerados</h2><div id="links" class="links"><span class="small">Nenhum vídeo gerado.</span></div></div>
 </div>
 
 <script type="module">
-import { FFmpeg } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/+esm';
-import { fetchFile, toBlobURL } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm';
-import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
-
 const parts=[[],[],[]], $=id=>document.getElementById(id);
-const ffmpeg=new FFmpeg(); let loaded=false, stopping=false, generated=[];
-function logStatus(s){$('status').textContent=s}
-function render(n){$('f'+(n+1)).innerHTML=parts[n].map((f,i)=>`<div class="file">${i+1}. ${f.name}</div>`).join(''); updateCount()}
-function updateCount(){const n=parts[0].length*parts[1].length*parts[2].length;$('count').textContent=n.toLocaleString('pt-BR')}
-[1,2,3].forEach(n=>$('p'+n).addEventListener('change',e=>{parts[n-1]=[...e.target.files];render(n-1);logStatus('Arquivos selecionados.')}));
+let ffmpeg=null, fetchFile=null;
+
+[1,2,3].forEach(n=>$('p'+n).addEventListener('change',e=>{
+ parts[n-1]=[...e.target.files];
+ $('f'+n).innerHTML=parts[n-1].map((f,i)=>'<div class="file">'+(i+1)+'. '+f.name+'</div>').join('');
+ update();
+}));
+function update(){ $('count').textContent=(parts[0].length*parts[1].length*parts[2].length).toLocaleString('pt-BR'); }
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function combos(){let r=[];for(const a of parts[0])for(const b of parts[1])for(const c of parts[2])r.push([a,b,c]);return shuffle(r)}
+async function delSafe(name){try{await ffmpeg.deleteFile(name)}catch(e){}}
 
 async function loadFFmpeg(){
- if(loaded)return;
- logStatus('Carregando motor de vídeo pela primeira vez…');
- const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd';
- await ffmpeg.load({
-   coreURL:await toBlobURL(`${base}/ffmpeg-core.js`,'text/javascript'),
-   wasmURL:await toBlobURL(`${base}/ffmpeg-core.wasm`,'application/wasm')
- });
- loaded=true;
-}
-function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function makeCombos(){
- const a=[];for(let i=0;i<parts[0].length;i++)for(let j=0;j<parts[1].length;j++)for(let k=0;k<parts[2].length;k++)a.push([parts[0][i],parts[1][j],parts[2][k]]);
- return shuffle(a);
-}
-async function safeDelete(name){try{await ffmpeg.deleteFile(name)}catch{}}
+ if(ffmpeg)return;
+ $('status').textContent='Carregando o motor de vídeo… na primeira vez pode demorar.';
+ const [{FFmpeg},{fetchFile:ff},{toBlobURL}]=await Promise.all([
+   import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/+esm'),
+   import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm'),
+   import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm')
+ ]);
+ fetchFile=ff;
+ ffmpeg=new FFmpeg();
 
-$('stop').onclick=()=>{stopping=true;logStatus('Parando após o vídeo atual…')}
+ /* Corrige o erro de Worker cross-origin: JS, WASM e Worker viram Blob URLs. */
+ const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+ const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');
+ const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
+ const workerURL=await toBlobURL(base+'/ffmpeg-core.worker.js','text/javascript');
+ await ffmpeg.load({coreURL,wasmURL,workerURL});
+}
 
 $('generate').onclick=async()=>{
- if(parts.some(x=>!x.length)){alert('Escolha pelo menos um vídeo em cada parte.');return}
- stopping=false;generated=[];$('links').innerHTML='';$('zip').disabled=true;$('generate').disabled=true;$('stop').disabled=false;
+ if(parts.some(x=>!x.length)){alert('Escolha pelo menos 1 vídeo em cada uma das três partes.');return}
+ $('generate').disabled=true;$('links').innerHTML='';$('bar').style.width='0%';
  try{
-   await loadFFmpeg();
-   const list=makeCombos().slice(0,Number($('limit').value));
-   for(let i=0;i<list.length;i++){
-     if(stopping)break;
-     const [a,b,c]=list[i];
-     logStatus(`Preparando criativo ${i+1} de ${list.length}…`);
-     for(const f of ['a.mp4','b.mp4','c.mp4','a2.mp4','b2.mp4','c2.mp4','list.txt','final.mp4']) await safeDelete(f);
-     await ffmpeg.writeFile('a.mp4',await fetchFile(a));
-     await ffmpeg.writeFile('b.mp4',await fetchFile(b));
-     await ffmpeg.writeFile('c.mp4',await fetchFile(c));
-     // Normaliza cada trecho para 1080x1920/30fps. O áudio é preservado quando disponível.
-     for(const [src,out] of [['a.mp4','a2.mp4'],['b.mp4','b2.mp4'],['c.mp4','c2.mp4']]){
-       const code=await ffmpeg.exec(['-i',src,'-vf','scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2','-r','30','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','aac','-b:a','128k','-ar','44100','-ac','2','-y',out]);
-       if(code!==0)throw new Error('Falha ao converter um trecho. Use MP4/H.264 para melhor compatibilidade.');
-     }
-     const listText="file 'a2.mp4'\\nfile 'b2.mp4'\\nfile 'c2.mp4'\\n";
-     await ffmpeg.writeFile('list.txt',new TextEncoder().encode(listText));
-     const code=await ffmpeg.exec(['-f','concat','-safe','0','-i','list.txt','-c','copy','-movflags','+faststart','-y','final.mp4']);
-     if(code!==0)throw new Error('Falha ao unir os trechos.');
-     const data=await ffmpeg.readFile('final.mp4');
-     const blob=new Blob([data.buffer],{type:'video/mp4'});
-     const url=URL.createObjectURL(blob);
-     const name=`criativo_${String(i+1).padStart(3,'0')}.mp4`;
-     generated.push({name,blob});
-     const aEl=document.createElement('a');aEl.href=url;aEl.download=name;aEl.textContent=`⬇ ${name}`;
-     $('links').appendChild(aEl);
-     $('bar').style.width=((i+1)/list.length*100)+'%';
-     for(const f of ['a.mp4','b.mp4','c.mp4','a2.mp4','b2.mp4','c2.mp4','list.txt','final.mp4'])await safeDelete(f);
+  await loadFFmpeg();
+  const list=combos().slice(0,Number($('limit').value));
+  for(let i=0;i<list.length;i++){
+   const [a,b,c]=list[i];$('status').textContent='Processando '+(i+1)+' de '+list.length+'…';
+   for(const n of ['a.mp4','b.mp4','c.mp4','a.ts','b.ts','c.ts','list.txt','final.mp4'])await delSafe(n);
+   await ffmpeg.writeFile('a.mp4',await fetchFile(a));await ffmpeg.writeFile('b.mp4',await fetchFile(b));await ffmpeg.writeFile('c.mp4',await fetchFile(c));
+   for(const [src,out] of [['a.mp4','a.ts'],['b.mp4','b.ts'],['c.mp4','c.ts']]){
+    const rc=await ffmpeg.exec(['-i',src,'-vf','scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2','-r','30','-c:v','libx264','-preset','ultrafast','-crf','25','-c:a','aac','-b:a','128k','-f','mpegts','-y',out]);
+    if(rc!==0)throw new Error('FFmpeg não conseguiu converter um dos vídeos.');
    }
-   if(generated.length){$('zip').disabled=false;logStatus(`${generated.length} criativo(s) pronto(s).`)}
-   else logStatus('Geração interrompida.');
- }catch(e){console.error(e);logStatus('Erro: '+(e?.message||e))}
- finally{$('generate').disabled=false;$('stop').disabled=true}
-}
-
-$('zip').onclick=async()=>{
- if(!generated.length)return;
- $('zip').disabled=true;logStatus('Montando ZIP…');
- const zip=new JSZip();for(const x of generated)zip.file(x.name,x.blob);
- const blob=await zip.generateAsync({type:'blob',compression:'STORE'});
- const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='video_mixer_criativos.zip';a.click();
- setTimeout(()=>URL.revokeObjectURL(url),10000);$('zip').disabled=false;logStatus('ZIP pronto para baixar.');
+   await ffmpeg.writeFile('list.txt',new TextEncoder().encode("file 'a.ts'\nfile 'b.ts'\nfile 'c.ts'\n"));
+   const rc=await ffmpeg.exec(['-f','concat','-safe','0','-i','list.txt','-c','copy','-movflags','+faststart','-y','final.mp4']);
+   if(rc!==0)throw new Error('FFmpeg não conseguiu unir os três vídeos.');
+   const data=await ffmpeg.readFile('final.mp4'),blob=new Blob([data.buffer],{type:'video/mp4'}),url=URL.createObjectURL(blob);
+   const ael=document.createElement('a');ael.href=url;ael.download='criativo_'+String(i+1).padStart(3,'0')+'.mp4';ael.textContent='⬇ '+ael.download;$('links').appendChild(ael);
+   $('bar').style.width=((i+1)/list.length*100)+'%';
+  }
+  $('status').textContent='Concluído: '+list.length+' vídeo(s).';
+ }catch(e){console.error(e);$('status').textContent='ERRO: '+(e?.message||String(e));}
+ finally{$('generate').disabled=false}
 };
-
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(console.warn);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
-</body>
-</html>
+</body></html>
