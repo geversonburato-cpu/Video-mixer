@@ -4,10 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080d18">
+
 <title>Video Mixer</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -23,11 +26,13 @@ padding:20px 15px 40px;
 }
 
 h1{
-margin:0 0 5px;
+margin:0 0 6px;
+font-size:28px;
 }
 
-p{
+.subtitle{
 color:#9ca9c3;
+margin-bottom:20px;
 }
 
 .card{
@@ -38,6 +43,10 @@ padding:16px;
 margin:12px 0;
 }
 
+h3{
+margin-top:0;
+}
+
 .drop{
 display:block;
 padding:18px;
@@ -45,6 +54,8 @@ text-align:center;
 border:1px dashed #596987;
 border-radius:12px;
 background:#0d1423;
+cursor:pointer;
+font-weight:bold;
 }
 
 .drop input{
@@ -54,34 +65,72 @@ display:none;
 .file{
 font-size:12px;
 background:#19243a;
-padding:8px;
-margin-top:5px;
-border-radius:7px;
+padding:9px;
+margin-top:6px;
+border-radius:8px;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
 }
 
-button,select{
+.count{
+font-size:22px;
+font-weight:bold;
+}
+
+select,
+button{
 width:100%;
 padding:14px;
-margin-top:10px;
+margin-top:12px;
 border-radius:10px;
-border:0;
 font-size:15px;
 font-weight:bold;
 }
 
+select{
+background:#19243a;
+color:#fff;
+border:1px solid #3b4965;
+}
+
 button{
 background:#6d5dfc;
-color:white;
+color:#fff;
+border:0;
+}
+
+button:disabled{
+opacity:.5;
+}
+
+.progress{
+height:9px;
+background:#202b43;
+border-radius:20px;
+overflow:hidden;
+margin-top:14px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:#6d5dfc;
+transition:width .2s;
 }
 
 .status{
 font-size:13px;
+color:#adb8ce;
+line-height:1.5;
 }
 
-#links a{
+.links a{
 display:block;
-padding:10px 0;
+padding:11px 0;
 color:#bdb8ff;
+border-bottom:1px solid #27334d;
+text-decoration:none;
 }
 </style>
 </head>
@@ -92,90 +141,153 @@ color:#bdb8ff;
 
 <h1>🎬 Video Mixer</h1>
 
-<p>Monte vários criativos juntando Gancho + Desenvolvimento + CTA.</p>
+<div class="subtitle">
+Monte seus criativos juntando Gancho + Desenvolvimento + CTA.
+</div>
 
 <div class="card">
 
 <h3>1 — Gancho</h3>
 
 <label class="drop">
-ESCOLHER VÍDEOS
-<input id="p1" type="file" accept="video/*" multiple>
+
+＋ ESCOLHER VÍDEOS
+
+<input
+id="p1"
+type="file"
+accept="video/*"
+multiple
+>
+
 </label>
 
 <div id="f1"></div>
 
 </div>
 
+
 <div class="card">
 
 <h3>2 — Desenvolvimento</h3>
 
 <label class="drop">
-ESCOLHER VÍDEOS
-<input id="p2" type="file" accept="video/*" multiple>
+
+＋ ESCOLHER VÍDEOS
+
+<input
+id="p2"
+type="file"
+accept="video/*"
+multiple
+>
+
 </label>
 
 <div id="f2"></div>
 
 </div>
 
+
 <div class="card">
 
 <h3>3 — CTA</h3>
 
 <label class="drop">
-ESCOLHER VÍDEOS
-<input id="p3" type="file" accept="video/*" multiple>
+
+＋ ESCOLHER VÍDEOS
+
+<input
+id="p3"
+type="file"
+accept="video/*"
+multiple
+>
+
 </label>
 
 <div id="f3"></div>
 
 </div>
 
+
 <div class="card">
 
-<div id="count">0 combinações</div>
+<div
+class="count"
+id="count"
+>
+0 combinações
+</div>
 
 <select id="limit">
 
-<option value="1">TESTE — 1 vídeo</option>
+<option value="1">
+TESTE — 1 vídeo
+</option>
 
-<option value="10">10 vídeos</option>
+<option value="10">
+10 vídeos
+</option>
 
-<option value="30">30 vídeos</option>
+<option value="30">
+30 vídeos
+</option>
 
 </select>
 
 <button id="generate">
+
 🔥 GERAR CRIATIVOS
+
 </button>
 
-<p id="status">
+<div class="progress">
+
+<div
+id="bar"
+class="bar"
+></div>
+
+</div>
+
+<p
+id="status"
+class="status"
+>
 Escolha um vídeo em cada etapa.
 </p>
 
-<div id="links"></div>
+</div>
+
+
+<div class="card">
+
+<h3>Vídeos gerados</h3>
+
+<div id="links">
+
+<span class="status">
+Nenhum vídeo gerado.
+</span>
 
 </div>
 
 </div>
 
-<script type="module">
+</div>
+<script>
 
 const partes = [[], [], []];
 
 const $ = id => document.getElementById(id);
-
-let ffmpeg = null;
-let fetchFile = null;
 
 
 // ===============================
 // SELEÇÃO DOS VÍDEOS
 // ===============================
 
-[1,2,3].forEach(numero => {
+[1, 2, 3].forEach(numero => {
 
   $("p" + numero).addEventListener("change", evento => {
 
@@ -183,12 +295,14 @@ let fetchFile = null;
 
     $("f" + numero).innerHTML =
       partes[numero - 1]
-      .map((arquivo, indice) =>
-        `<div class="file">${indice + 1}. ${arquivo.name}</div>`
-      )
-      .join("");
+        .map((arquivo, indice) =>
+          `<div class="file">
+            ${indice + 1}. ${arquivo.name}
+          </div>`
+        )
+        .join("");
 
-    atualizarQuantidade();
+    atualizarContador();
 
   });
 
@@ -196,10 +310,10 @@ let fetchFile = null;
 
 
 // ===============================
-// CONTADOR DE COMBINAÇÕES
+// CONTADOR
 // ===============================
 
-function atualizarQuantidade(){
+function atualizarContador() {
 
   const total =
     partes[0].length *
@@ -214,87 +328,18 @@ function atualizarQuantidade(){
 
 
 // ===============================
-// CARREGAR FFMPEG
+// CRIAR COMBINAÇÕES
 // ===============================
 
-async function carregarFFmpeg(){
-
-  if(ffmpeg) return;
-
-  $("status").textContent =
-    "Carregando o motor de vídeo... aguarde.";
-
-  const moduloFFmpeg =
-    await import(
-      "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/+esm"
-    );
-
-  const moduloUtil =
-    await import(
-      "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/+esm"
-    );
-
-  const FFmpeg = moduloFFmpeg.FFmpeg;
-
-  fetchFile = moduloUtil.fetchFile;
-
-  const toBlobURL = moduloUtil.toBlobURL;
-
-  ffmpeg = new FFmpeg();
-
-
-  // =====================================
-  // IMPORTANTE:
-  // MODO SINGLE-THREAD
-  // SEM workerURL
-  // =====================================
-
-  const base =
-    "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
-
-
-  const coreURL =
-    await toBlobURL(
-      base + "/ffmpeg-core.js",
-      "text/javascript"
-    );
-
-
-  const wasmURL =
-    await toBlobURL(
-      base + "/ffmpeg-core.wasm",
-      "application/wasm"
-    );
-
-
-  await ffmpeg.load({
-
-    coreURL: coreURL,
-
-    wasmURL: wasmURL
-
-  });
-
-
-  $("status").textContent =
-    "Motor de vídeo carregado.";
-
-}
-
-
-// ===============================
-// GERAR COMBINAÇÕES
-// ===============================
-
-function gerarCombinacoes(){
+function criarCombinacoes() {
 
   const resultado = [];
 
-  for(const gancho of partes[0]){
+  for (const gancho of partes[0]) {
 
-    for(const desenvolvimento of partes[1]){
+    for (const desenvolvimento of partes[1]) {
 
-      for(const cta of partes[2]){
+      for (const cta of partes[2]) {
 
         resultado.push([
           gancho,
@@ -308,39 +353,486 @@ function gerarCombinacoes(){
 
   }
 
-  return resultado;
+  return resultado.sort(
+    () => Math.random() - 0.5
+  );
 
 }
 
 
 // ===============================
-// APAGAR ARQUIVO TEMPORÁRIO
+// CARREGAR VÍDEO
 // ===============================
 
-async function apagar(nome){
+function carregarVideo(arquivo) {
 
-  try{
+  return new Promise((resolve, reject) => {
 
-    await ffmpeg.deleteFile(nome);
+    const video =
+      document.createElement("video");
 
-  }catch(e){}
+    video.preload = "auto";
+    video.muted = false;
+    video.playsInline = true;
+
+    const url =
+      URL.createObjectURL(arquivo);
+
+    video.src = url;
+
+    video.onloadedmetadata = () => {
+
+      resolve({
+        video: video,
+        url: url
+      });
+
+    };
+
+    video.onerror = () => {
+
+      URL.revokeObjectURL(url);
+
+      reject(
+        new Error(
+          "Não foi possível abrir o vídeo: " +
+          arquivo.name
+        )
+      );
+
+    };
+
+  });
 
 }
 
 
 // ===============================
-// GERAR VÍDEOS
+// FORMATO DE GRAVAÇÃO
+// ===============================
+
+function escolherFormato() {
+
+  const formatos = [
+
+    "video/webm;codecs=vp9,opus",
+
+    "video/webm;codecs=vp8,opus",
+
+    "video/webm"
+
+  ];
+
+  for (const formato of formatos) {
+
+    if (
+      MediaRecorder.isTypeSupported(formato)
+    ) {
+
+      return formato;
+
+    }
+
+  }
+
+  return "";
+
+}
+
+
+// ===============================
+// GRAVAR UM CRIATIVO
+// ===============================
+
+async function gravarCriativo(
+  arquivos,
+  numero
+) {
+
+  $("status").textContent =
+    "Preparando criativo " +
+    numero +
+    "...";
+
+
+  const videos = [];
+
+  try {
+
+    for (const arquivo of arquivos) {
+
+      videos.push(
+        await carregarVideo(arquivo)
+      );
+
+    }
+
+
+    // ===========================
+    // CANVAS VERTICAL
+    // ===========================
+
+    const canvas =
+      document.createElement("canvas");
+
+    canvas.width = 1080;
+    canvas.height = 1920;
+
+    const contexto =
+      canvas.getContext("2d");
+
+
+    // ===========================
+    // STREAM DO CANVAS
+    // ===========================
+
+    const stream =
+      canvas.captureStream(30);
+
+
+    // ===========================
+    // ÁUDIO
+    // ===========================
+
+    let audioContext = null;
+    let audioDestino = null;
+
+    try {
+
+      const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      audioContext =
+        new AudioContext();
+
+      audioDestino =
+        audioContext.createMediaStreamDestination();
+
+      for (const item of videos) {
+
+        const fonte =
+          audioContext.createMediaElementSource(
+            item.video
+          );
+
+        fonte.connect(
+          audioDestino
+        );
+
+      }
+
+      const trilhas =
+        audioDestino.stream.getAudioTracks();
+
+      for (const trilha of trilhas) {
+
+        stream.addTrack(trilha);
+
+      }
+
+    } catch (erroAudio) {
+
+      console.log(
+        "Áudio não disponível:",
+        erroAudio
+      );
+
+    }
+
+
+    // ===========================
+    // VERIFICAR MEDIA RECORDER
+    // ===========================
+
+    const formato =
+      escolherFormato();
+
+    if (!formato) {
+
+      throw new Error(
+        "Seu navegador não suporta a gravação de vídeo necessária."
+      );
+
+    }
+
+
+    const gravador =
+      new MediaRecorder(
+        stream,
+        {
+          mimeType: formato,
+          videoBitsPerSecond: 7000000
+        }
+      );
+
+
+    const partesGravadas = [];
+
+
+    gravador.ondataavailable =
+      evento => {
+
+        if (
+          evento.data &&
+          evento.data.size > 0
+        ) {
+
+          partesGravadas.push(
+            evento.data
+          );
+
+        }
+
+      };
+
+
+    const finalizado =
+      new Promise((resolve, reject) => {
+
+        gravador.onstop =
+          () => resolve();
+
+        gravador.onerror =
+          () =>
+            reject(
+              new Error(
+                "Erro durante a gravação."
+              )
+            );
+
+      });
+
+
+    // ===========================
+    // COMEÇAR GRAVAÇÃO
+    // ===========================
+
+    gravador.start(1000);
+
+
+    // ===========================
+    // PROCESSAR 3 PARTES
+    // ===========================
+
+    for (
+      let parte = 0;
+      parte < videos.length;
+      parte++
+    ) {
+
+      const item =
+        videos[parte];
+
+      const video =
+        item.video;
+
+
+      video.currentTime = 0;
+
+
+      await new Promise(resolve => {
+
+        if (video.readyState >= 2) {
+
+          resolve();
+
+        } else {
+
+          video.oncanplay =
+            () => resolve();
+
+        }
+
+      });
+
+
+      $("status").textContent =
+        "Criativo " +
+        numero +
+        " — parte " +
+        (parte + 1) +
+        " de 3";
+
+
+      await video.play();
+
+
+      while (!video.ended) {
+
+        const largura =
+          video.videoWidth;
+
+        const altura =
+          video.videoHeight;
+
+
+        const proporcaoVideo =
+          largura / altura;
+
+        const proporcaoCanvas =
+          1080 / 1920;
+
+
+        let larguraFinal;
+        let alturaFinal;
+        let x;
+        let y;
+
+
+        if (
+          proporcaoVideo >
+          proporcaoCanvas
+        ) {
+
+          alturaFinal =
+            1920;
+
+          larguraFinal =
+            alturaFinal *
+            proporcaoVideo;
+
+          x =
+            (1080 -
+              larguraFinal) / 2;
+
+          y = 0;
+
+        } else {
+
+          larguraFinal =
+            1080;
+
+          alturaFinal =
+            larguraFinal /
+            proporcaoVideo;
+
+          x = 0;
+
+          y =
+            (1920 -
+              alturaFinal) / 2;
+
+        }
+
+
+        contexto.fillStyle =
+          "#000";
+
+        contexto.fillRect(
+          0,
+          0,
+          1080,
+          1920
+        );
+
+
+        contexto.drawImage(
+          video,
+          x,
+          y,
+          larguraFinal,
+          alturaFinal
+        );
+
+
+        await new Promise(
+          resolve =>
+            requestAnimationFrame(
+              resolve
+            )
+        );
+
+      }
+
+
+      video.pause();
+
+    }
+
+
+    // ===========================
+    // ENCERRAR GRAVAÇÃO
+    // ===========================
+
+    gravador.stop();
+
+    await finalizado;
+
+
+    if (audioContext) {
+
+      try {
+
+        await audioContext.close();
+
+      } catch (e) {}
+
+    }
+
+
+    // ===========================
+    // LIMPAR VÍDEOS
+    // ===========================
+
+    for (const item of videos) {
+
+      item.video.pause();
+
+      URL.revokeObjectURL(
+        item.url
+      );
+
+    }
+
+
+    // ===========================
+    // CRIAR ARQUIVO
+    // ===========================
+
+    return new Blob(
+      partesGravadas,
+      {
+        type: formato
+      }
+    );
+
+  } catch (erro) {
+
+    for (const item of videos) {
+
+      try {
+
+        item.video.pause();
+
+        URL.revokeObjectURL(
+          item.url
+        );
+
+      } catch (e) {}
+
+    }
+
+    throw erro;
+
+  }
+
+}
+
+
+// ===============================
+// BOTÃO GERAR
 // ===============================
 
 $("generate").addEventListener(
   "click",
   async () => {
 
-    if(
+    if (
       partes[0].length === 0 ||
       partes[1].length === 0 ||
       partes[2].length === 0
-    ){
+    ) {
 
       alert(
         "Escolha pelo menos 1 vídeo em cada etapa."
@@ -351,18 +843,21 @@ $("generate").addEventListener(
     }
 
 
-    $("generate").disabled = true;
+    $("generate").disabled =
+      true;
 
-    $("links").innerHTML = "";
+    $("links").innerHTML =
+      "";
 
 
-    try{
+    $("bar").style.width =
+      "0%";
 
-      await carregarFFmpeg();
 
+    try {
 
       const todas =
-        gerarCombinacoes();
+        criarCombinacoes();
 
 
       const limite =
@@ -372,195 +867,22 @@ $("generate").addEventListener(
 
 
       const combinacoes =
-        todas.slice(0, limite);
+        todas.slice(
+          0,
+          limite
+        );
 
 
-      for(
+      for (
         let i = 0;
         i < combinacoes.length;
         i++
-      ){
-
-        const gancho =
-          combinacoes[i][0];
-
-        const desenvolvimento =
-          combinacoes[i][1];
-
-        const cta =
-          combinacoes[i][2];
-
-
-        $("status").textContent =
-          "Processando vídeo " +
-          (i + 1) +
-          " de " +
-          combinacoes.length +
-          "...";
-
-
-        await apagar("gancho.mp4");
-        await apagar("desenvolvimento.mp4");
-        await apagar("cta.mp4");
-        await apagar("lista.txt");
-        await apagar("final.mp4");
-
-
-        await ffmpeg.writeFile(
-          "gancho.mp4",
-          await fetchFile(gancho)
-        );
-
-
-        await ffmpeg.writeFile(
-          "desenvolvimento.mp4",
-          await fetchFile(desenvolvimento)
-        );
-
-
-        await ffmpeg.writeFile(
-          "cta.mp4",
-          await fetchFile(cta)
-        );
-
-
-        // =================================
-        // NORMALIZAÇÃO DOS 3 VÍDEOS
-        // =================================
-
-        const arquivos = [
-          ["gancho.mp4", "gancho.ts"],
-          ["desenvolvimento.mp4", "desenvolvimento.ts"],
-          ["cta.mp4", "cta.ts"]
-        ];
-
-
-        for(
-          const [entrada, saida]
-          of arquivos
-        ){
-
-          await apagar(saida);
-
-
-          const retorno =
-            await ffmpeg.exec([
-
-              "-i",
-              entrada,
-
-              "-vf",
-              "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2",
-
-              "-r",
-              "30",
-
-              "-c:v",
-              "libx264",
-
-              "-preset",
-              "ultrafast",
-
-              "-crf",
-              "26",
-
-              "-c:a",
-              "aac",
-
-              "-b:a",
-              "128k",
-
-              "-f",
-              "mpegts",
-
-              "-y",
-
-              saida
-
-            ]);
-
-
-          if(retorno !== 0){
-
-            throw new Error(
-              "Erro ao preparar o vídeo."
-            );
-
-          }
-
-        }
-
-
-        // =================================
-        // LISTA PARA CONCATENAÇÃO
-        // =================================
-
-        const lista =
-          "file 'gancho.ts'\n" +
-          "file 'desenvolvimento.ts'\n" +
-          "file 'cta.ts'\n";
-
-
-        await ffmpeg.writeFile(
-          "lista.txt",
-          new TextEncoder().encode(lista)
-        );
-
-
-        // =================================
-        // UNIR OS 3 VÍDEOS
-        // =================================
-
-        const retornoFinal =
-          await ffmpeg.exec([
-
-            "-f",
-            "concat",
-
-            "-safe",
-            "0",
-
-            "-i",
-            "lista.txt",
-
-            "-c",
-            "copy",
-
-            "-movflags",
-            "+faststart",
-
-            "-y",
-
-            "final.mp4"
-
-          ]);
-
-
-        if(retornoFinal !== 0){
-
-          throw new Error(
-            "Erro ao unir os vídeos."
-          );
-
-        }
-
-
-        // =================================
-        // DISPONIBILIZAR DOWNLOAD
-        // =================================
-
-        const dados =
-          await ffmpeg.readFile(
-            "final.mp4"
-          );
-
+      ) {
 
         const blob =
-          new Blob(
-            [dados.buffer],
-            {
-              type:"video/mp4"
-            }
+          await gravarCriativo(
+            combinacoes[i],
+            i + 1
           );
 
 
@@ -570,40 +892,49 @@ $("generate").addEventListener(
           );
 
 
-        const nome =
+        const link =
+          document.createElement("a");
+
+
+        link.href =
+          url;
+
+
+        link.download =
           "criativo_" +
           String(i + 1)
-          .padStart(3,"0") +
-          ".mp4";
+            .padStart(3, "0") +
+          ".webm";
 
-
-        const link =
-          document.createElement(
-            "a"
-          );
-
-
-        link.href = url;
-
-        link.download = nome;
 
         link.textContent =
-          "⬇️ Baixar " + nome;
+          "⬇️ Baixar criativo " +
+          String(i + 1)
+            .padStart(3, "0");
 
 
         $("links")
           .appendChild(link);
 
+
+        $("bar").style.width =
+          (
+            ((i + 1) /
+            combinacoes.length) *
+            100
+          ) +
+          "%";
+
       }
 
 
       $("status").textContent =
-        "✅ Pronto! " +
+        "✅ Concluído! " +
         combinacoes.length +
-        " vídeo(s) gerado(s).";
+        " criativo(s) gerado(s).";
 
 
-    }catch(erro){
+    } catch (erro) {
 
       console.error(erro);
 
@@ -624,4 +955,4 @@ $("generate").addEventListener(
   }
 );
 
- </script>
+</script>
