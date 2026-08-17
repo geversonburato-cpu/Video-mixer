@@ -5,57 +5,173 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080d18">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>Video Mixer</title>
+<title>Video Mixer v2</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif}
-.app{max-width:700px;margin:auto;padding:20px 15px 40px}h1{margin:0 0 6px;font-size:28px}
-.subtitle{color:#9ca9c3;margin-bottom:20px}.card{background:#111a2c;border:1px solid #27334d;border-radius:16px;padding:16px;margin:12px 0}
-h3{margin-top:0}.drop{display:block;padding:18px;text-align:center;border:1px dashed #596987;border-radius:12px;background:#0d1423;cursor:pointer;font-weight:bold}
-.drop input{display:none}.file{font-size:12px;background:#19243a;padding:9px;margin-top:6px;border-radius:8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.count{font-size:22px;font-weight:bold}select,button{width:100%;padding:14px;margin-top:12px;border-radius:10px;font-size:15px;font-weight:bold}
-select{background:#19243a;color:#fff;border:1px solid #3b4965}button{background:#6d5dfc;color:#fff;border:0}button:disabled{opacity:.5}
-.progress{height:9px;background:#202b43;border-radius:20px;overflow:hidden;margin-top:14px}.bar{height:100%;width:0%;background:#6d5dfc;transition:width .2s}
-.status{font-size:13px;color:#adb8ce;line-height:1.5}.links a{display:block;padding:11px 0;color:#bdb8ff;border-bottom:1px solid #27334d;text-decoration:none}
-.small{font-size:12px;color:#7f8ba5;margin-top:12px}
+*{box-sizing:border-box}body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif}.app{max-width:700px;margin:auto;padding:20px 15px 40px}
+h1{margin:0 0 6px;font-size:28px}.subtitle{color:#9ca9c3;margin-bottom:20px}.card{background:#111a2c;border:1px solid #27334d;border-radius:16px;padding:16px;margin:12px 0}h3{margin-top:0}
+.drop{display:block;padding:18px;text-align:center;border:1px dashed #596987;border-radius:12px;background:#0d1423;cursor:pointer;font-weight:bold}.drop input{display:none}
+.file{font-size:12px;background:#19243a;padding:9px;margin-top:6px;border-radius:8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.count{font-size:22px;font-weight:bold}
+select,button{width:100%;padding:14px;margin-top:12px;border-radius:10px;font-size:15px;font-weight:bold}select{background:#19243a;color:#fff;border:1px solid #3b4965}button{background:#6d5dfc;color:#fff;border:0}button:disabled{opacity:.5}
+.progress{height:9px;background:#202b43;border-radius:20px;overflow:hidden;margin-top:14px}.bar{height:100%;width:0%;background:#6d5dfc;transition:width .2s}.status{font-size:13px;color:#adb8ce;line-height:1.5}
+.links a{display:block;padding:11px 0;color:#bdb8ff;border-bottom:1px solid #27334d;text-decoration:none}.ok{color:#77e6a5}.err{color:#ff9a9a}.small{font-size:12px;color:#7f8ba5;margin-top:12px}
 </style>
 </head>
 <body>
 <div class="app">
-<h1>🎬 Video Mixer</h1>
-<div class="subtitle">Monte seus criativos juntando Gancho + Desenvolvimento + CTA.</div>
-<div class="card"><h3>1 — Gancho</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p1" type="file" accept="video/*" multiple></label><div id="f1"></div></div>
-<div class="card"><h3>2 — Desenvolvimento</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p2" type="file" accept="video/*" multiple></label><div id="f2"></div></div>
-<div class="card"><h3>3 — CTA</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p3" type="file" accept="video/*" multiple></label><div id="f3"></div></div>
-<div class="card"><div class="count" id="count">0 combinações</div>
+<h1>🎬 Video Mixer v2</h1>
+<div class="subtitle">Gancho + Desenvolvimento + CTA, direto no navegador.</div>
+
+<div class="card"><h3>1 — Gancho</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p1" type="file" accept="video/mp4,video/webm,video/*" multiple></label><div id="f1"></div></div>
+<div class="card"><h3>2 — Desenvolvimento</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p2" type="file" accept="video/mp4,video/webm,video/*" multiple></label><div id="f2"></div></div>
+<div class="card"><h3>3 — CTA</h3><label class="drop">＋ ESCOLHER VÍDEOS<input id="p3" type="file" accept="video/mp4,video/webm,video/*" multiple></label><div id="f3"></div></div>
+
+<div class="card">
+<div class="count" id="count">0 combinações</div>
 <select id="limit"><option value="1">TESTE — 1 vídeo</option><option value="10">10 vídeos</option><option value="30">30 vídeos</option></select>
-<button id="generate">🔥 GERAR CRIATIVOS</button><div class="progress"><div id="bar" class="bar"></div></div>
+<button id="generate">🔥 GERAR CRIATIVOS</button>
+<div class="progress"><div id="bar" class="bar"></div></div>
 <p id="status" class="status">Escolha um vídeo em cada etapa.</p>
-<div class="small">Processamento local. Sem FFmpeg, JSZip, Worker externo ou CDN.</div></div>
+<div class="small">Sem FFmpeg, JSZip, CDN ou Worker externo. A compatibilidade do vídeo é testada antes da geração.</div>
+</div>
+
 <div class="card"><h3>Vídeos gerados</h3><div id="links"><span class="status">Nenhum vídeo gerado.</span></div></div>
 </div>
+
 <script>
 "use strict";
 const partes=[[],[],[]],$=id=>document.getElementById(id);
-[1,2,3].forEach(n=>{$("p"+n).addEventListener("change",e=>{partes[n-1]=[...e.target.files];$("f"+n).innerHTML=partes[n-1].map((f,i)=>"<div class='file'>"+(i+1)+". "+esc(f.name)+"</div>").join("");atualizarContador()})});
+
+[1,2,3].forEach(n=>{
+  $("p"+n).addEventListener("change",e=>{
+    partes[n-1]=[...e.target.files];
+    $("f"+n).innerHTML=partes[n-1].map((f,i)=>`<div class="file">${i+1}. ${esc(f.name)} — ${Math.round(f.size/1024/1024*10)/10} MB</div>`).join("");
+    atualizarContador();
+  });
+});
+
 function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 function atualizarContador(){const t=partes[0].length*partes[1].length*partes[2].length;$("count").textContent=t.toLocaleString("pt-BR")+" combinações"}
-function criarCombinacoes(){const r=[];for(const a of partes[0])for(const b of partes[1])for(const c of partes[2])r.push([a,b,c]);return r.sort(()=>Math.random()-.5)}
-function carregarVideo(arq){return new Promise((ok,no)=>{const v=document.createElement("video"),u=URL.createObjectURL(arq);v.preload="auto";v.muted=true;v.playsInline=true;v.src=u;v.onloadedmetadata=()=>ok({video:v,url:u});v.onerror=()=>{URL.revokeObjectURL(u);no(new Error("Não foi possível abrir o vídeo: "+arq.name))}})}
-function formato(){for(const f of ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"])if(window.MediaRecorder&&MediaRecorder.isTypeSupported(f))return f;return ""}
-async function gravar(arqs,num){
-$("status").textContent="Preparando criativo "+num+"...";const vs=[];let ac=null;
-try{
-for(const a of arqs)vs.push(await carregarVideo(a));
-const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1920;const ctx=canvas.getContext("2d"),stream=canvas.captureStream(30);
-try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){ac=new AC();const dest=ac.createMediaStreamDestination();for(const x of vs)try{ac.createMediaElementSource(x.video).connect(dest)}catch(e){}dest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));if(ac.state==="suspended")await ac.resume()}}catch(e){}
-const mime=formato();if(!mime)throw new Error("Seu navegador não suporta gravação WebM.");
-const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:7000000}),chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-const done=new Promise((ok,no)=>{rec.onstop=ok;rec.onerror=()=>no(new Error("Erro durante a gravação."))});rec.start(1000);
-for(let i=0;i<vs.length;i++){const v=vs[i].video;v.currentTime=0;await new Promise(ok=>{if(v.readyState>=2)ok();else v.oncanplay=ok});$("status").textContent="Criativo "+num+" — parte "+(i+1)+" de 3";await v.play();
-while(!v.ended){const vw=v.videoWidth||1080,vh=v.videoHeight||1920,p=vw/vh,pc=1080/1920;let w,h,x,y;if(p>pc){h=1920;w=h*p;x=(1080-w)/2;y=0}else{w=1080;h=w/p;x=0;y=(1920-h)/2}ctx.fillStyle="#000";ctx.fillRect(0,0,1080,1920);ctx.drawImage(v,x,y,w,h);await new Promise(requestAnimationFrame)}v.pause()}
-rec.stop();await done;if(ac)try{await ac.close()}catch(e){}for(const x of vs){x.video.pause();URL.revokeObjectURL(x.url)}return new Blob(chunks,{type:mime})
-}catch(e){if(ac)try{await ac.close()}catch(x){}for(const x of vs)try{URL.revokeObjectURL(x.url)}catch(y){}throw e}}
-$("generate").addEventListener("click",async()=>{if(!partes[0].length||!partes[1].length||!partes[2].length){alert("Escolha pelo menos 1 vídeo em cada etapa.");return}
-$("generate").disabled=true;$("links").innerHTML="";$("bar").style.width="0%";try{const c=criarCombinacoes().slice(0,Number($("limit").value));for(let i=0;i<c.length;i++){const blob=await gravar(c[i],i+1),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="criativo_"+String(i+1).padStart(3,"0")+".webm";a.textContent="⬇️ Baixar criativo "+String(i+1).padStart(3,"0");$("links").appendChild(a);$("bar").style.width=((i+1)/c.length*100)+"%"}$("status").textContent="✅ Concluído! "+c.length+" criativo(s) gerado(s)."}catch(e){console.error(e);$("status").textContent="❌ ERRO: "+(e.message||e)}$("generate").disabled=false});
+
+function criarCombinacoes(){
+  const r=[];for(const a of partes[0])for(const b of partes[1])for(const c of partes[2])r.push([a,b,c]);
+  return r.sort(()=>Math.random()-.5);
+}
+
+function carregarVideo(arquivo){
+  return new Promise((resolve,reject)=>{
+    const v=document.createElement("video");
+    const url=URL.createObjectURL(arquivo);
+    let terminou=false;
+    const falha=()=>{if(terminou)return;terminou=true;URL.revokeObjectURL(url);
+      reject(new Error("O Chrome não conseguiu decodificar '"+arquivo.name+"'. Tente um MP4 H.264/AAC."));};
+    v.preload="metadata";v.muted=true;v.playsInline=true;v.setAttribute("playsinline","");
+    v.onloadedmetadata=()=>{
+      if(terminou)return;
+      if(!v.videoWidth||!v.videoHeight){falha();return;}
+      v.preload="auto";
+      v.oncanplay=()=>{
+        if(terminou)return;terminou=true;
+        resolve({video:v,url:url});
+      };
+      v.load();
+    };
+    v.onerror=falha;
+    v.src=url;
+    v.load();
+  });
+}
+
+function formato(){
+  if(!window.MediaRecorder)return "";
+  for(const f of ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"])
+    if(MediaRecorder.isTypeSupported(f))return f;
+  return "";
+}
+
+async function testarVideos(arquivos){
+  const carregados=[];
+  try{
+    for(const a of arquivos){
+      $("status").textContent="Verificando compatibilidade: "+a.name;
+      carregados.push(await carregarVideo(a));
+    }
+    return carregados;
+  }catch(e){
+    for(const x of carregados)try{URL.revokeObjectURL(x.url)}catch(_){}
+    throw e;
+  }
+}
+
+async function gravar(arquivos,num){
+  const videos=await testarVideos(arquivos);
+  let ac=null;
+  try{
+    $("status").textContent="Preparando criativo "+num+"...";
+    const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1920;
+    const ctx=canvas.getContext("2d");const stream=canvas.captureStream(30);
+
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(AC){
+        ac=new AC();const dest=ac.createMediaStreamDestination();
+        for(const x of videos)try{ac.createMediaElementSource(x.video).connect(dest)}catch(_){}
+        dest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));
+        if(ac.state==="suspended")await ac.resume();
+      }
+    }catch(e){console.log("Áudio indisponível",e)}
+
+    const mime=formato();
+    if(!mime)throw new Error("Seu Chrome não suporta MediaRecorder WebM.");
+
+    const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:7000000});
+    const chunks=[];
+    rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+    const done=new Promise((ok,no)=>{rec.onstop=ok;rec.onerror=()=>no(new Error("Erro durante a gravação."))});
+    rec.start(500);
+
+    for(let i=0;i<videos.length;i++){
+      const v=videos[i].video;
+      v.currentTime=0;
+      $("status").textContent=`Criativo ${num} — parte ${i+1} de 3`;
+      await v.play();
+      while(!v.ended){
+        const vw=v.videoWidth||1080,vh=v.videoHeight||1920,p=vw/vh,pc=1080/1920;
+        let w,h,x,y;
+        if(p>pc){h=1920;w=h*p;x=(1080-w)/2;y=0}else{w=1080;h=w/p;x=0;y=(1920-h)/2}
+        ctx.fillStyle="#000";ctx.fillRect(0,0,1080,1920);ctx.drawImage(v,x,y,w,h);
+        await new Promise(requestAnimationFrame);
+      }
+      v.pause();
+    }
+    rec.stop();await done;
+    if(ac)try{await ac.close()}catch(_){}
+    for(const x of videos){x.video.pause();URL.revokeObjectURL(x.url)}
+    return new Blob(chunks,{type:mime});
+  }catch(e){
+    if(ac)try{await ac.close()}catch(_){}
+    for(const x of videos)try{URL.revokeObjectURL(x.url)}catch(_){}
+    throw e;
+  }
+}
+
+$("generate").addEventListener("click",async()=>{
+  if(!partes[0].length||!partes[1].length||!partes[2].length){alert("Escolha pelo menos 1 vídeo em cada etapa.");return}
+  $("generate").disabled=true;$("links").innerHTML="";$("bar").style.width="0%";
+  try{
+    const combos=criarCombinacoes().slice(0,Number($("limit").value));
+    for(let i=0;i<combos.length;i++){
+      const blob=await gravar(combos[i],i+1);
+      const url=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=url;a.download="criativo_"+String(i+1).padStart(3,"0")+".webm";
+      a.textContent="⬇️ Baixar criativo "+String(i+1).padStart(3,"0");
+      $("links").appendChild(a);$("bar").style.width=((i+1)/combos.length*100)+"%";
+    }
+    $("status").className="status ok";$("status").textContent="✅ Concluído! "+combos.length+" criativo(s) gerado(s).";
+  }catch(e){
+    console.error(e);$("status").className="status err";$("status").textContent="❌ ERRO: "+(e.message||e);
+  }
+  $("generate").disabled=false;
+});
 </script>
-</body></html>
+</body>
+</html>
