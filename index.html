@@ -319,10 +319,7 @@ async function carregarFFmpeg(){
     );
 
   }
-
-
-
-  const FFmpegClass =
+const FFmpegClass =
     window.FFmpegWASM &&
     window.FFmpegWASM.FFmpeg;
 
@@ -336,7 +333,6 @@ if(!FFmpegClass){
 
 ffmpeg =
     new FFmpegClass();
-
 
   ffmpeg.on(
     "progress",
@@ -362,9 +358,7 @@ ffmpeg =
     }
   );
 
-
-
-  const baseURL =
+ const baseURL =
   "https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/esm";
 
 const toBlobURL =
@@ -395,8 +389,7 @@ await ffmpeg.load({
   classWorkerURL: workerURL
 });
 
-
-  ffmpegCarregado = true;
+ffmpegCarregado = true;
 
 
   $("status").textContent =
@@ -519,7 +512,6 @@ async function gravarCriativo(
   arquivos,
   numero
 ){
-
   $("status").textContent =
     "Preparando criativo " +
     numero +
